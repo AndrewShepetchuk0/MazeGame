@@ -58,22 +58,22 @@ public class Main extends JPanel implements KeyListener
     {
         switch (e.getKeyCode()) 
         {
-            case KeyEvent.VK_W:
+            case Key_W:
                 py -= pSize;
                 dir = "up";
                 //Moves player and changes current player image
                 break;
-            case KeyEvent.VK_S:
+            case Key_S:
                 py += pSize;
                 dir = "down";
                 //Moves player and changes current player image
                 break;
-            case KeyEvent.VK_A:
+            case Key_A:
                 px -= pSize;
                 dir = "left";
                 //Moves player and changes current player image
                 break;
-            case KeyEvent.VK_D:
+            case Key_D:
                 px += pSize;
                 dir = "right";
                 //Moves player and changes current player image
