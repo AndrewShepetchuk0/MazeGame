@@ -24,9 +24,9 @@ public class Main extends JPanel implements KeyListener
     //Makes a new image called background and sets it to the file "wrld1.png" within it's corresponding directory
     int[] resolution = {1200, 600};
     //Array for resolution where the first number is the width of the window and the second number is the height of the window
+    public static int KEY_W = KeyEvent.VK_W, KEY_S = KeyEvent.VK_S, KEY_A = KeyEvent.VK_A, KEY_D = KeyEvent.VK_D;
     
     //Basic window functions
-    
     public Main() throws IOException
     {
         setPreferredSize(new Dimension(resolution[0], resolution[1]));
