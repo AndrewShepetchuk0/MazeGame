@@ -42,11 +42,11 @@ public class Main extends JPanel implements KeyListener
     public void pImage()
     {
        try{
-           up = ImageIO.read(getClass().getResourceAsStream("\\assets\\1.png"));
-           down = ImageIO.read(getClass().getResourceAsStream("\\assets\\2.png"));
-           left = ImageIO.read(getClass().getResourceAsStream("\\assets\\3.png"));
-           right = ImageIO.read(getClass().getResourceAsStream("\\assets\\4.png"));
-           wrld1 = ImageIO.read(getClass().getResourceAsStream("\\assets\\wrld1.png"));
+           up = ImageIO.read(getClass().getResourceAsStream("/assets/1.png"));
+           down = ImageIO.read(getClass().getResourceAsStream("/assets/2.png"));
+           left = ImageIO.read(getClass().getResourceAsStream("/assets/3.png"));
+           right = ImageIO.read(getClass().getResourceAsStream("/assets/4.png"));
+           wrld1 = ImageIO.read(getClass().getResourceAsStream("/assets/wrld1.png"));
        }catch(IOException e){} 
        //sets each image variable to the corresponding image
     }
