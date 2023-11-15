@@ -19,7 +19,7 @@ public class Main extends JPanel implements KeyListener
     public static JFrame main;
     //Makes new JFrame  
     String currentDir = System.getProperty("user.dir");
-    String filePath = currentDir + "\\src\\assets\\wrld1.png";
+    String filePath = currentDir + "/src/assets/wrld1.png";
     BufferedImage background = ImageIO.read(new File(filePath));
     //Makes a new image called background and sets it to the file "wrld1.png" within it's corresponding directory
     int[] resolution = {1200, 600};
