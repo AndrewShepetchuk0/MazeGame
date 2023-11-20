@@ -1,4 +1,4 @@
 # MazeGame
 SImple Java maze game.
 
-Not copmpiled, just code 
+Not compiled, just code 
