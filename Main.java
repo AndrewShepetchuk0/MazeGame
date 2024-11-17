@@ -5,6 +5,7 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+//gonna change this. It's not a very efficient way of doing all this, or maybe it is
 public class Main extends JPanel implements KeyListener
 {
     //Variables
