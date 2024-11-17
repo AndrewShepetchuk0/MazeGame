@@ -5,146 +5,111 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 
-//gonna change this. It's not a very efficient way of doing all this, or maybe it is
-public class Main extends JPanel implements KeyListener
-{
-    //Variables
-    
-    public static int pSize = 60;
-    //Variable for the size fo the player
-    public int x = 60, y = 60;
-    //Basic variables for character location
-    public BufferedImage up, down, left, right, wrld1;
-    public String dir = "down";
-    //creates image variable for each direction and makes a string file for the direction of the player with the default value set to up as well as the default player location
-    public static JFrame main;
-    //Makes new JFrame  
-    String currentDir = System.getProperty("user.dir");
-    String filePath = currentDir + "/src/assets/wrld1.png";
-    BufferedImage background = ImageIO.read(new File(filePath));
-    //Makes a new image called background and sets it to the file "wrld1.png" within it's corresponding directory
-    int[] resolution = {1200, 600};
-    //Array for resolution where the first number is the width of the window and the second number is the height of the window
-    public static int KEY_W = KeyEvent.VK_W, KEY_S = KeyEvent.VK_S, KEY_A = KeyEvent.VK_A, KEY_D = KeyEvent.VK_D;
-    
-    //Basic window functions
-    public Main() throws IOException
-    {
-        setPreferredSize(new Dimension(resolution[0], resolution[1]));
+public class Main extends JPanel implements KeyListener {
+
+    // Constants
+    private static final int PLAYER_SIZE = 60;
+    private static final int[] RESOLUTION = {1200, 600};
+    private static final int KEY_W = KeyEvent.VK_W, KEY_S = KeyEvent.VK_S, KEY_A = KeyEvent.VK_A, KEY_D = KeyEvent.VK_D;
+
+    // Variables
+    private int playerX = 60, playerY = 60;
+    private BufferedImage up, down, left, right, background;
+    private String direction = "down";
+    private static JFrame mainFrame;
+
+    private final int colorBlackRGB = Color.BLACK.getRGB();
+    private final int colorRedRGB = Color.RED.getRGB();
+
+    // Constructor
+    public Main() throws IOException {
+        setPreferredSize(new Dimension(RESOLUTION[0], RESOLUTION[1]));
         setFocusable(true);
         addKeyListener(this);
-        pImage();
+        loadImages();
     }
-    //Sets the game resolution to the values determined in the previous variables, makes the game window focusable, and implements key input
 
-    
-    //Image loading
-    
-    public void pImage()
-    {
-       try{
-           up = ImageIO.read(getClass().getResourceAsStream("/assets/1.png"));
-           down = ImageIO.read(getClass().getResourceAsStream("/assets/2.png"));
-           left = ImageIO.read(getClass().getResourceAsStream("/assets/3.png"));
-           right = ImageIO.read(getClass().getResourceAsStream("/assets/4.png"));
-           wrld1 = ImageIO.read(getClass().getResourceAsStream("/assets/wrld1.png"));
-       }catch(IOException e){} 
-       //sets each image variable to the corresponding image
+    // Load images once during initialization
+    private void loadImages() throws IOException {
+        up = ImageIO.read(getClass().getResourceAsStream("/assets/1.png"));
+        down = ImageIO.read(getClass().getResourceAsStream("/assets/2.png"));
+        left = ImageIO.read(getClass().getResourceAsStream("/assets/3.png"));
+        right = ImageIO.read(getClass().getResourceAsStream("/assets/4.png"));
+        background = ImageIO.read(getClass().getResourceAsStream("/assets/wrld1.png"));
     }
-    
-    //Character controller
-    
+
+    // Handle key presses
     @Override
-    public void keyPressed(KeyEvent e) 
-    {
-        switch (e.getKeyCode()) 
-        {
-            case Key_W:
-                py -= pSize;
-                dir = "up";
-                //Moves player and changes current player image
+    public void keyPressed(KeyEvent e) {
+        int prevX = playerX, prevY = playerY;
+
+        switch (e.getKeyCode()) {
+            case KEY_W:
+                playerY -= PLAYER_SIZE;
+                direction = "up";
                 break;
-            case Key_S:
-                py += pSize;
-                dir = "down";
-                //Moves player and changes current player image
+            case KEY_S:
+                playerY += PLAYER_SIZE;
+                direction = "down";
                 break;
-            case Key_A:
-                px -= pSize;
-                dir = "left";
-                //Moves player and changes current player image
+            case KEY_A:
+                playerX -= PLAYER_SIZE;
+                direction = "left";
                 break;
-            case Key_D:
-                px += pSize;
-                dir = "right";
-                //Moves player and changes current player image
+            case KEY_D:
+                playerX += PLAYER_SIZE;
+                direction = "right";
                 break;
         }
-        if (background.getRGB(px, py) == Color.BLACK.getRGB()){
-            JOptionPane.showMessageDialog(null, "You touched the wall.","Message", JOptionPane.ERROR_MESSAGE);
-                main.dispose();
+
+        // Bounds checking
+        playerX = Math.max(0, Math.min(playerX, RESOLUTION[0] - PLAYER_SIZE));
+        playerY = Math.max(0, Math.min(playerY, RESOLUTION[1] - PLAYER_SIZE));
+
+        // Collision detection
+        if (background.getRGB(playerX, playerY) == colorBlackRGB) {
+            JOptionPane.showMessageDialog(null, "You touched the wall.", "Game Over", JOptionPane.ERROR_MESSAGE);
+            mainFrame.dispose();
+        } else if (background.getRGB(playerX, playerY) == colorRedRGB) {
+            JOptionPane.showMessageDialog(null, "Congratulations! You completed the game!", "Victory", JOptionPane.PLAIN_MESSAGE);
+            mainFrame.dispose();
         }
-        if (background.getRGB(px, py) == Color.RED.getRGB()){
-            System.out.println("good job");
-            JOptionPane.showMessageDialog(null, "Congratulations! You completed the game!","Message", JOptionPane.PLAIN_MESSAGE);
-                main.dispose();
+
+        // Repaint only if the position has changed
+        if (prevX != playerX || prevY != playerY) {
+            repaint();
         }
-        repaint();
     }
-    /*
-    1. Gets input from the player and updates the screen based on user input.
-    2. Checks if the player touches black and closes the game if so 
-    3. Checks if the player touches red and counts that as a win condition 
-    */
-    
+
     @Override
-    public void keyReleased(KeyEvent e){}
-    //filler method
-    
+    public void keyReleased(KeyEvent e) {}
+
     @Override
     public void keyTyped(KeyEvent e) {}
-    //filler method
-    
-    //Graphics
-    
+
+    // Paint graphics
     @Override
-    public void paintComponent(Graphics g) 
-    {
-       pImage();
-       super.paintComponent(g);
-       BufferedImage image = null;
-       
-       switch(dir){
-           case "up":
-               image = up;
-               break;
-           case "down":
-               image = down;
-               break;
-           case "left":
-               image = left;
-               break;
-           case "right":
-               image = right;
-               break;
-       }
-       g.drawImage(wrld1, 0, 0, null);
-       g.drawImage(image, px, py, this);   
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(background, 0, 0, null);
+
+        BufferedImage playerImage = switch (direction) {
+            case "up" -> up;
+            case "down" -> down;
+            case "left" -> left;
+            case "right" -> right;
+            default -> down;
+        };
+
+        g.drawImage(playerImage, playerX, playerY, PLAYER_SIZE, PLAYER_SIZE, null);
     }
-    /*
-    1. Draws background image
-    2. draws image corresponding to direction inputed by the player
-    */
-    
-    //Window
-    
-    public static void main(String[] args) throws IOException
-    {
-        main = new JFrame("Maze Game");
-        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        main.setContentPane(new Main());
-        main.pack();
-        main.setVisible(true);
-        
+
+    // Main method to start the game
+    public static void main(String[] args) throws IOException {
+        mainFrame = new JFrame("Maze Game");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setContentPane(new Main());
+        mainFrame.pack();
+        mainFrame.setVisible(true);
     }
-    //makes a new, visible window for the game   
+}
